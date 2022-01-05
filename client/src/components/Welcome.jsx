@@ -14,7 +14,7 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
     type={type}
     step="0.0001"
     value={value}
-  
+    onChange={(e) => handleChange(e, name)}
     className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
   />
 );
@@ -24,8 +24,14 @@ const Welcome = () => {
   const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
+    //destructuring 
     const { addressTo, amount, keyword, message } = formData;
 
+    e.preventDefault();
+
+    if(!addressTo || !amount|| !keyword || !message) return console.log('no working')
+
+    sendTransaction();
     
   };
 
@@ -39,7 +45,7 @@ const Welcome = () => {
           <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
             Explore the crypto world. Buy and sell cryptocurrencies easily on Krypto.
           </p>
-           
+           {!currentAccount &&
             <button
               type="button"
               onClick={connectWallet}
@@ -50,6 +56,7 @@ const Welcome = () => {
                 Connect Wallet
               </p>
             </button>
+            }
          
 
           <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
@@ -90,11 +97,12 @@ const Welcome = () => {
             </div>
           </div>
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
-            <Input placeholder="Address To" name="addressTo" type="text"  />
-            <Input placeholder="Amount (ETH)" name="amount" type="number"  />
-            <Input placeholder="Keyword (Gif)" name="keyword" type="text"  />
-            <Input placeholder="Enter Message" name="message" type="text" />
+            <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange}  />
+            <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange}   />
+            <Input placeholder="Keyword (Gif)" name="keyword" type="text"  handleChange={handleChange}  />
+            <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange}  />
             <div className="h-[1px] w-full bg-gray-400 my-2" />
+           
 
 {false
   ? <Loader />
@@ -107,8 +115,6 @@ const Welcome = () => {
       Send now
     </button>
   )}
-
-       
           </div>
         </div>
       </div>
