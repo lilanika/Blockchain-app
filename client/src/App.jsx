@@ -19,7 +19,9 @@ const App = () => {
     <Services/>
     <Transactions/>
     <Footer/>
+ 
   </div>
+
   )
 }
 

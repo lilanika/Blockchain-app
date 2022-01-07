@@ -9,9 +9,14 @@ export const TransactionContext = React.createContext();
 
 const { ethereum } = window;
 
+
+//Connecting to Ethereum with MetaMask
 const getEthereumContract = () => {
+  // In ethers, a provider provides an abstraction for a connection to the Ethereum Network. It can be used to issue read only queries and send signed state changing transactions to the Ethereum Network.
   const provider = new ethers.providers.Web3Provider(ethereum);
+  // The MetaMask plugin also allows signing transactions to - send ether, pay, change state within the blockchain. For this, you need the account signer...
   const signer = provider.getSigner();
+
   const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
 
   //console.log(contractAddress, contractABI, signer, transactionsContract);
@@ -71,6 +76,8 @@ setFormData((prevState) => ({...prevState, [name]: e.target.value}))
     }
   };
 
+
+
   const sendTransaction = async () => {
     try {
       if (!ethereum) return alert("Please install MetaMask.");
@@ -80,10 +87,10 @@ setFormData((prevState) => ({...prevState, [name]: e.target.value}))
       const { addressTo, amount, keyword, message } = formData;
       
      const transactionContract = getEthereumContract();
-     //ethers packages helps convert 
+     // to convert it from ether (as a string) to wei (as a BigNumber)
      const parsedAmount = ethers.utils.parseEther(amount); 
 
-     // send eth from on address to another
+     // Send  ether from one adress to another
      await ethereum.request({
        method:'eth_sendTransaction',
        params: [{
